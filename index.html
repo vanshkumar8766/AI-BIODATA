@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <title>AI से सवाल पूछें (Free Version)</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: linear-gradient(270deg, #ff6ec4, #7873f5, #4ade80);
+      background-size: 600% 600%;
+      animation: gradientAnimation 16s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .form-container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+      text-align: center;
+      color: white;
+      width: 350px;
+      backdrop-filter: blur(10px);
+    }
+
+    h1, h2, p, input, button {
+      animation: floatText 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatText {
+      from {
+        transform: translateY(0);
+        text-shadow: 0 0 5px #fff, 0 0 10px #0ff, 0 0 15px #0ff;
+      }
+      to {
+        transform: translateY(-5px);
+        text-shadow: 0 0 10px #fff, 0 0 20px #0ff, 0 0 30px #0ff;
+      }
+    }
+
+    input, button {
+      padding: 10px;
+      width: 100%;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      background: linear-gradient(45deg, #00f, #0ff);
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: linear-gradient(45deg, #0ff, #00f);
+    }
+
+    #answer {
+      min-height: 50px;
+      margin-top: 10px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>AI से सवाल पूछें (Free Version)</h1>
+    <input type="text" id="name" placeholder="अपना नाम लिखें">
+    <input type="text" id="question" placeholder="अपना सवाल लिखें">
+    <button onclick="askQuestion()">पूछो</button>
+
+    <h2>जवाब:</h2>
+    <p id="answer"></p>
+  </div>
+
+  <script>
+    function askQuestion() {
+      const name = document.getElementById('name').value;
+      const question = document.getElementById('question').value;
+
+      fetch('/ask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, question })
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('answer').innerText = data.answer;
+      })
+      .catch(error => {
+        document.getElementById('answer').innerText = 'Error: ' + error;
+      });
+    }
+  </script>
+</body>
+</html>
